@@ -1,6 +1,6 @@
-package fr.rli.hexaarchi.infrastructure.adapter.driven;
+package fr.rli.freecodecamp.infrastructure.adapter.driven;
 
-import fr.rli.hexaarchi.boundary.port.driven.IWriteLines;
+import fr.rli.freecodecamp.boundary.port.driven.IWriteLines;
 
 import java.util.Objects;
 

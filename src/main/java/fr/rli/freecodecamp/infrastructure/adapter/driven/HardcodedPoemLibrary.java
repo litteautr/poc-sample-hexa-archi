@@ -1,6 +1,6 @@
-package fr.rli.hexaarchi.infrastructure.adapter.driven;
+package fr.rli.freecodecamp.infrastructure.adapter.driven;
 
-import fr.rli.hexaarchi.boundary.port.driven.IObtainPoems;
+import fr.rli.freecodecamp.boundary.port.driven.IObtainPoems;
 
 public class HardcodedPoemLibrary implements IObtainPoems {
     public String[] getMePoems(String language) {

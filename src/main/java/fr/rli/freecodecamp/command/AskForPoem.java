@@ -1,4 +1,4 @@
-package fr.rli.hexaarchi.command;
+package fr.rli.freecodecamp.command;
 
 public class AskForPoem {
     private String language;

@@ -1,7 +1,7 @@
-package fr.rli.hexaarchi.infrastructure.adapter.driver;
+package fr.rli.freecodecamp.infrastructure.adapter.driver;
 
-import fr.rli.hexaarchi.boundary.port.driver.IReactToCommands;
-import fr.rli.hexaarchi.command.AskForPoem;
+import fr.rli.freecodecamp.boundary.port.driver.IReactToCommands;
+import fr.rli.freecodecamp.command.AskForPoem;
 
 public class SimulatedUser {
     private IReactToCommands driverPort;
