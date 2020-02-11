@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 public class PoetryReaderTest {
 
     @Test
+    /**
+     * First Adapter
+     */
     public void should_giver_verses_when_asked_for_poetry() {
         IRequestVerses poetryReader = new PoetryReader();
         String verses = poetryReader.giveMePoetry();
