@@ -14,7 +14,7 @@ public class PoetryReaderTest {
 
     @Test
     /**
-     * First Adapter
+     * First left Side Adapter
      */
     public void should_give_verses_when_asked_for_poetry() {
         IRequestVerses poetryReader = new PoetryReader();
@@ -24,6 +24,9 @@ public class PoetryReaderTest {
     }
 
     @Test
+    /**
+     * First Right Side Adapter
+     */
     public void should_give_verses_from_a_repository_when_asked_for_poetry() {
         IObtainPoem poetryLibrary = mock(IObtainPoem.class);
         when(poetryLibrary.giveMePoem()).thenReturn("this is poetry from the stub library");
