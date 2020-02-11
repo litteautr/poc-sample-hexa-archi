@@ -15,14 +15,11 @@ public class PoetryReader implements IRequestVerses {
     }
 
     public PoetryReader() {
-
+        poetryLibrary = new HardcodedPoetryLibrary();
     }
 
     @Override
     public String giveMePoetry() {
-        if (poetryLibrary != null) {
-            return poetryLibrary.giveMePoem();
-        }
-        return "this is hard coded poetry";
+        return poetryLibrary.giveMePoem();
     }
 }
