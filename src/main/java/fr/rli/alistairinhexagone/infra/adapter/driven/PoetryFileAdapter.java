@@ -1,30 +1,26 @@
 package fr.rli.alistairinhexagone.infra.adapter.driven;
 
+import com.google.common.io.Resources;
 import fr.rli.alistairinhexagone.domain.port.driven.IObtainPoem;
 
-import java.io.*;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class PoetryFileAdapter implements IObtainPoem {
 
     private String filePath;
 
-    public PoetryFileAdapter(String filePath) throws IOException {
-
+    public PoetryFileAdapter(String filePath) {
         this.filePath = filePath;
     }
 
     @Override
     public String giveMePoem() {
-        File file = new File(filePath);
-
+        URL url = Resources.getResource(filePath);
         try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            try {
-                return br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
+            return Resources.toString(url, StandardCharsets.UTF_8);
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

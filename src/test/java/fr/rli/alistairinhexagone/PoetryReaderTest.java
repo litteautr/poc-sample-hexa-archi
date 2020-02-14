@@ -15,10 +15,10 @@ import static org.mockito.Mockito.*;
 
 public class PoetryReaderTest {
 
-    @Test
     /**
      * First left Side Adapter
      */
+    @Test
     public void should_give_verses_when_asked_for_poetry() {
         IRequestVerses poetryReader = new PoetryReader();
         String verses = poetryReader.giveMePoetry();
@@ -26,10 +26,11 @@ public class PoetryReaderTest {
         Assertions.assertEquals("this is hard coded poetry", verses);
     }
 
-    @Test
+
     /**
      * First Right Side Adapter
      */
+    @Test
     public void should_give_verses_from_a_repository_when_asked_for_poetry() {
         IObtainPoem poetryLibrary = mock(IObtainPoem.class);
         when(poetryLibrary.giveMePoem()).thenReturn("this is poetry from the stub library");
@@ -40,6 +41,9 @@ public class PoetryReaderTest {
         Assertions.assertEquals("this is poetry from the stub library", verses);
     }
 
+    /**
+     * Left Side Console Adapter
+     */
     @Test
     public void should_give_verses_from_when_asked_for_poetry_with_a_console() {
         //1. Instantiate the "I need to go out" Adapters
@@ -54,19 +58,17 @@ public class PoetryReaderTest {
         ConsoleAdapter consoleAdapter = new ConsoleAdapter(poetryReader, publicationStrategy);
         consoleAdapter.ask();
 
-        //check call of console.writeLine
+        //Check call of console.writeLine
         verify(publicationStrategy).writeLine("this is poetry from the stub library");
     }
 
+    /**
+     * Right side file adapter
+     */
     @Test
     public void should_give_verses_from_when_asked_for_poetry_from_a_file() {
         //1. Instantiate the "I need to go out" Adapters
-        PoetryFileAdapter fileAdapter = null;
-        try {
-            fileAdapter = new PoetryFileAdapter("C:\\Users\\litte\\Documents");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        PoetryFileAdapter fileAdapter = new PoetryFileAdapter("poem.txt");
 
         //2. Instantiate the Hexagon
         PoetryReader poetryReader = new PoetryReader(fileAdapter);
