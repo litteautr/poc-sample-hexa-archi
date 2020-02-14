@@ -2,13 +2,16 @@ package fr.rli.alistairinhexagone;
 
 import fr.rli.alistairinhexagone.domain.PoetryReader;
 import fr.rli.alistairinhexagone.domain.port.driven.IObtainPoem;
+import fr.rli.alistairinhexagone.infra.adapter.driven.PoetryFileAdapter;
+import fr.rli.alistairinhexagone.infra.adapter.driver.IwriteLine;
 import fr.rli.alistairinhexagone.domain.port.driver.IRequestVerses;
+import fr.rli.alistairinhexagone.infra.adapter.driver.ConsoleAdapter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import java.io.IOException;
+
+import static org.mockito.Mockito.*;
 
 public class PoetryReaderTest {
 
@@ -35,5 +38,40 @@ public class PoetryReaderTest {
         String verses = poetryReader.giveMePoetry();
 
         Assertions.assertEquals("this is poetry from the stub library", verses);
+    }
+
+    @Test
+    public void should_give_verses_from_when_asked_for_poetry_with_a_console() {
+        //1. Instantiate the "I need to go out" Adapters
+        IObtainPoem poetryLibrary = mock(IObtainPoem.class);
+        when(poetryLibrary.giveMePoem()).thenReturn("this is poetry from the stub library");
+
+        //2. Instantiate the Hexagon
+        PoetryReader poetryReader = new PoetryReader(poetryLibrary);
+
+        //3. Instantiate "I want to go inside the hexagone" Adapters
+        IwriteLine publicationStrategy = mock(IwriteLine.class);
+        ConsoleAdapter consoleAdapter = new ConsoleAdapter(poetryReader, publicationStrategy);
+        consoleAdapter.ask();
+
+        //check call of console.writeLine
+        verify(publicationStrategy).writeLine("this is poetry from the stub library");
+    }
+
+    @Test
+    public void should_give_verses_from_when_asked_for_poetry_from_a_file() {
+        //1. Instantiate the "I need to go out" Adapters
+        PoetryFileAdapter fileAdapter = null;
+        try {
+            fileAdapter = new PoetryFileAdapter("C:\\Users\\litte\\Documents");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //2. Instantiate the Hexagon
+        PoetryReader poetryReader = new PoetryReader(fileAdapter);
+        String verses = poetryReader.giveMePoetry();
+
+        Assertions.assertEquals("this is a poem from the file", verses);
     }
 }
