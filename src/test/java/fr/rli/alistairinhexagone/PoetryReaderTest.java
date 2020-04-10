@@ -2,33 +2,33 @@ package fr.rli.alistairinhexagone;
 
 import fr.rli.alistairinhexagone.domain.PoetryReader;
 import fr.rli.alistairinhexagone.domain.port.driven.IObtainPoem;
+import fr.rli.alistairinhexagone.infra.adapter.driven.PoetryDatabaseAdapter;
 import fr.rli.alistairinhexagone.infra.adapter.driven.PoetryFileAdapter;
+import fr.rli.alistairinhexagone.infra.adapter.driver.ConsolePublicationStrategy;
 import fr.rli.alistairinhexagone.infra.adapter.driver.IwriteLine;
 import fr.rli.alistairinhexagone.domain.port.driver.IRequestVerses;
 import fr.rli.alistairinhexagone.infra.adapter.driver.ConsoleAdapter;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class PoetryReaderTest {
 
     /**
-     * First left Side Adapter
+     * 1. First left Side Adapter
      */
     @Test
     public void should_give_verses_when_asked_for_poetry() {
         IRequestVerses poetryReader = new PoetryReader();
         String verses = poetryReader.giveMePoetry();
 
-        Assertions.assertEquals("this is hard coded poetry", verses);
+        assertEquals("this is hard coded poetry", verses);
     }
 
 
     /**
-     * First Right Side Adapter
+     * 2. First Right Side Adapter
      */
     @Test
     public void should_give_verses_from_a_repository_when_asked_for_poetry() {
@@ -38,14 +38,14 @@ public class PoetryReaderTest {
         PoetryReader poetryReader = new PoetryReader(poetryLibrary);
         String verses = poetryReader.giveMePoetry();
 
-        Assertions.assertEquals("this is poetry from the stub library", verses);
+        assertEquals("this is poetry from the stub library", verses);
     }
 
     /**
-     * Left Side Console Adapter
+     * 3. Left Side  Adapter : a Console
      */
     @Test
-    public void should_give_verses_from_when_asked_for_poetry_with_a_console() {
+    public void should_give_verses_from_a_repository_when_asked_for_poetry_with_a_console() {
         //1. Instantiate the "I need to go out" Adapters
         IObtainPoem poetryLibrary = mock(IObtainPoem.class);
         when(poetryLibrary.giveMePoem()).thenReturn("this is poetry from the stub library");
@@ -63,10 +63,10 @@ public class PoetryReaderTest {
     }
 
     /**
-     * Right side file adapter
+     * 4. Right side adapter : a file
      */
     @Test
-    public void should_give_verses_from_when_asked_for_poetry_from_a_file() {
+    public void should_give_verses_from_a_file_when_asked_for_poetry() {
         //1. Instantiate the "I need to go out" Adapters
         PoetryFileAdapter fileAdapter = new PoetryFileAdapter("poem.txt");
 
@@ -74,6 +74,41 @@ public class PoetryReaderTest {
         PoetryReader poetryReader = new PoetryReader(fileAdapter);
         String verses = poetryReader.giveMePoetry();
 
-        Assertions.assertEquals("this is a poem from the file", verses);
+        assertEquals("this is a poem from the file", verses);
+    }
+
+    /**
+     * Double loop test US
+     */
+    @Test
+    public void us_1_should_give_verses_from_a_file_when_asked_for_poetry_with_a_console() {
+        // I want to go out
+        IObtainPoem poemGetter = new PoetryFileAdapter("poem.txt");
+
+        // Hexagon
+        PoetryReader hexagone = new PoetryReader(poemGetter);
+        String poem = hexagone.giveMePoetry();
+        assertEquals("this is a poem from the file", poem);
+
+        // I want to go in
+        IwriteLine strategy = mock(ConsolePublicationStrategy.class);
+        ConsoleAdapter console = new ConsoleAdapter(hexagone, strategy);
+        console.ask();
+
+        verify(strategy).writeLine("this is a poem from the file");
+    }
+
+    /**
+     * 5. Right side adapter : a database
+     */
+    @Test
+    public void should_give_verses_from_a_database_when_asked_for_poetry() {
+        IObtainPoem dbAdapter = mock(PoetryDatabaseAdapter.class);
+        when(dbAdapter.giveMePoem()).thenReturn("this is a poem from the database");
+
+        PoetryReader reader = new PoetryReader(dbAdapter);
+        String poem = reader.giveMePoetry();
+
+        assertEquals("this is a poem from the database", poem);
     }
 }

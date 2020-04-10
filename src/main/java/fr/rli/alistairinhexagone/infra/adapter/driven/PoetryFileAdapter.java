@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import static com.google.common.io.Resources.getResource;
+
 public class PoetryFileAdapter implements IObtainPoem {
 
     private String filePath;
@@ -17,7 +19,7 @@ public class PoetryFileAdapter implements IObtainPoem {
 
     @Override
     public String giveMePoem() {
-        URL url = Resources.getResource(filePath);
+        URL url = getResource(filePath);
         try {
             return Resources.toString(url, StandardCharsets.UTF_8);
         } catch (IOException e) {
